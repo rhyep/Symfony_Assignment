@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<br><br><br><br>
+	<h2 class="page-header">All files uploaded</h2>
+	<table class="table table-striped"> 
+	<thead> 
+	<tr> 
+	<th>#</th> 
+	<th>File Name</th> 
+	<th>Updated Date</th> 
+	<th>Created Date</th> 
+	<th>File Type</th>
+	<th>File Size</th>  
+	</tr> 
+	</thead> 
+	<tbody> 
+	{% for todo in todos %}
+	<tr> 
+	<th scope="row">{{todo.id}}</th> 
+	<td>{{todo.name}}</td> 
+	<td>{{todo.updatedDate|date('F j, Y, g:i a')}}</td>
+	<td>{{todo.createdDate|date('F j, Y, g:i a')}}</td> 
+	<td>{{todo.fileType}}</td>
+	<td>{{todo.fileSize}}</td>
+	<td>
+	<a href="/todo/details/{{todo.id}}" class="btn btn-success">View</a>
+	<a href="/todo/edit/{{todo.id}}" class="btn btn-default">Update</a>
+	<a href="/todo/delete/{{todo.id}}" class="btn btn-danger">Delete</a>
+	</tr> 
+	{%endfor%}
+	</tbody> 
+	</table>
+{% endblock %}
