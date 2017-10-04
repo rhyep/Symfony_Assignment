@@ -3,10 +3,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Todo;
+use AppBundle\Form\TodoType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-
+use AppBundle\Service\FileUploader;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -28,9 +29,9 @@ class TodoController extends Controller
     }
 
       /**
-     * @Route("/todo/upload", name="todo_upload")
+     * @Route("/todo/insert", name="todo_insert")
      */
-    public function uploadAction(Request $request)
+    public function insertAction(Request $request)
     {
         $todo = new Todo;
 
@@ -38,7 +39,7 @@ class TodoController extends Controller
             ->add('name', TextType::class, array('attr' => array('class' => 'form-control', 'style' =>'margin-bottom:15px')))
             ->add('file_type', TextType::class, array('attr' => array('class' => 'form-control', 'style' =>'margin-bottom:15px')))
             ->add('file_size', TextType::class, array('attr' => array('class' => 'form-control', 'style' =>'margin-bottom:15px')))
-            ->add('save', SubmitType::class, array('label' => 'Upload', 'attr' => array('class' => 'btn btn-primary', 'style' =>'margin-bottom:15px')))
+            ->add('save', SubmitType::class, array('label' => 'Save', 'attr' => array('class' => 'btn btn-primary', 'style' =>'margin-bottom:15px')))
             ->getForm();
 
         $form->handleRequest($request);
@@ -64,13 +65,13 @@ class TodoController extends Controller
 
             $this->addFlash(
                 'notice',
-                'File Uploaded'
+                'Saved'
             );
 
             return $this->redirectToRoute('todo_list');
         }    
 
-        return $this->render('todo/upload.html.twig', array(
+        return $this->render('todo/insert.html.twig', array(
             'form' => $form->createView()
         ));
     }
@@ -83,11 +84,51 @@ class TodoController extends Controller
         return $this->render('todo/edit.html.twig');
     }
 
+    /**
+     * @Route("/todo/upload", name="todo_upload")
+     */
+    public function uploadAction(Request $request, FileUploader $fileUploader)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $todo = new Todo();
+        $form = $this->createForm(TodoType::class, $todo);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $file = $todo->getSample();
+            $fileName = $fileUploader->upload($file);
+
+            $todo->setSample($fileName);
+
+            // Update the 'sample' property to store the PDF file name
+            // instead of its contents
+            $todo->setSample($fileName);
+
+            // ... persist the $todo variable or any other work
+
+            return $this->redirect($this->generateUrl('todo_list'));
+        }
+
+        return $this->render('todo/upload.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }  
+
       /**
      * @Route("/todo/details/{id}", name="todo_details")
      */
     public function detailsAction($id)
     {
+
+        $todo = $this->getDoctrine()
+            ->getRepository('AppBundle:Todo')
+            ->find($id);
+            
+        return $this->render('todo/details.html.twig', array(
+            'todo' => $todo
+        ));
+
         return $this->render('todo/details.html.twig');
     }
 }

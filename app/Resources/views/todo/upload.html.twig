@@ -1,10 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	<br><br><br><br>
-	<h2 class="page-header">Upload Files</h2>
-	{{form_start(form)}}
-	{{form_widget(form)}}
-	{{form_end(form)}}
-
+<br><br><br><br>
+	<h2 class="page-header">Please Upload a file</h2>
+	{{form_start(form.sample)}}
+	{{form_widget(form.sample)}}
+	{{form_end(form.sample)}}
 {% endblock %}

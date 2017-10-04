@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Todo
@@ -186,5 +187,28 @@ class Todo
     {
         return $this->fileSize;
     }
+
+    // ...
+
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload the product sample as a PDF file.")
+     * @Assert\File(mimeTypes={ "application/pdf" })
+     */
+    private $sample;
+
+    public function getSample()
+    {
+        return $this->sample;
+    }
+
+    public function setSample($sample)
+    {
+        $this->sample = $sample;
+
+        return $this;
+    }
+
 }
 

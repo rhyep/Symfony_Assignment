@@ -2,7 +2,7 @@
 
 {% block body %}
 <br><br><br><br>
-	<h2 class="page-header">All files uploaded</h2>
+	<h2 class="page-header">All files</h2>
 	<table class="table table-striped"> 
 	<thead> 
 	<tr> 
@@ -24,7 +24,6 @@
 	<td>{{todo.fileType}}</td>
 	<td>{{todo.fileSize}}</td>
 	<td>
-	<a href="/todo/details/{{todo.id}}" class="btn btn-success">View</a>
 	<a href="/todo/edit/{{todo.id}}" class="btn btn-default">Update</a>
 	<a href="/todo/delete/{{todo.id}}" class="btn btn-danger">Delete</a>
 	</tr> 
