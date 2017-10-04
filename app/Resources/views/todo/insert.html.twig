@@ -1,10 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	<br><br><br><br>
-	<h2 class="page-header">Input Files</h2>
-	{{form_start(form)}}
-	{{form_widget(form)}}
-	{{form_end(form)}}
-
+	<div class="row" style="height:100px;"></div>
+	<div class="row">
+		<div class="col-lg-offset-5 col-lg-5">
+			<h2 class="page-header">Input Files</h2>
+            {{form_start(form)}}
+            {{form_widget(form)}}
+            {{form_end(form)}}
+		</div>
+	</div>
 {% endblock %}
